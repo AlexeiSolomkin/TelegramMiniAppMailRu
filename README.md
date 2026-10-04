@@ -1,2 +1,3 @@
 # TelegeramMiniAppMailRu
-Frontend репозиторий Telegeram Mini App проекта для Ответов Mail Ru
+
+Frontend репозиторий Telegram Mini App проекта для Ответов Mail Ru
