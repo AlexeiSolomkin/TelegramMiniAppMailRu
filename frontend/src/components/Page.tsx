@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { backButton } from '@tma.js/sdk-react';
 import { type PropsWithChildren, useEffect } from 'react';
 
@@ -14,7 +14,7 @@ export function Page({ children, back = true }: PropsWithChildren<{
     if (back) {
       backButton.show();
       return backButton.onClick(() => {
-        navigate(-1);
+        void navigate(-1);
       });
     }
     backButton.hide();

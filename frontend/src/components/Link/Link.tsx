@@ -1,8 +1,8 @@
 import { openLink } from '@tma.js/sdk-react';
 import { type FC, type MouseEventHandler, useCallback } from 'react';
-import { Link as RouterLink, type LinkProps } from 'react-router-dom';
+import { Link as RouterLink, type LinkProps } from 'react-router';
 
-import { classNames } from '@/css/classnames.ts';
+import clsx from 'clsx';
 
 import './Link.css';
 
@@ -41,7 +41,7 @@ export const Link: FC<LinkProps> = ({
       {...rest}
       to={to}
       onClick={onClick}
-      className={classNames(className, 'link')}
+      className={clsx(className, 'link')}
     />
   );
 };

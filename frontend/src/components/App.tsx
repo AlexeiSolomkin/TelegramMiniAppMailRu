@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, HashRouter } from 'react-router-dom';
+import { Navigate, Route, Routes, HashRouter } from 'react-router';
 import { useLaunchParams, useSignal, miniApp } from '@tma.js/sdk-react';
 import { AppRoot } from '@telegram-apps/telegram-ui';
 
