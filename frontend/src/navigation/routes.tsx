@@ -1,14 +1,11 @@
-import type { ComponentType, JSX } from 'react';
+import type { ComponentType } from 'react';
 
-import { FeedPage } from "@/pages/FeedPage/FeedPage.tsx";
+import { FeedPage } from '@/pages/FeedPage/FeedPage.tsx';
 
 interface Route {
-  path: string;
-  Component: ComponentType;
-  title?: string;
-  icon?: JSX.Element;
+    path: string;
+    Component: ComponentType;
+    title?: string;
 }
 
-export const routes: Route[] = [
-  { path: '/', Component: FeedPage, title: 'Feed' },
-];
+export const routes: Route[] = [{ path: '/', Component: FeedPage, title: 'Feed' }];

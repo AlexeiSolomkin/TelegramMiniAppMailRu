@@ -1,7 +1,7 @@
 export interface Author {
     name: string;
     avatar?: string;
-};
+}
 
 export interface Post {
     id: number;
@@ -14,4 +14,4 @@ export interface Post {
     createdAt: string;
     likesCount: number;
     commentsCount: number;
-};
+}

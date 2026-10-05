@@ -1,4 +1,4 @@
-import type {Post} from '@/types/post.ts';
+import type { Post } from '@/types/post.ts';
 
 const DEFAULT_AVATAR = '/defaultAvatar/defaultAvatar.jpg';
 
@@ -14,10 +14,10 @@ export function PostCard({ post }: PostCardProps) {
             <p>Author: {post.author.name}</p>
             <img src={post.author.avatar || DEFAULT_AVATAR} alt={`${post.author.name}'s avatar`} />
             <p>Created At: {post.createdAt}</p>
-            {post.tags && post.tags.length > 0 && (
-                <p>Tags: {post.tags.join(', ')}</p>
-            )}
-            <p>Likes: {post.likesCount} | Comments: {post.commentsCount}</p>
+            {post.tags && post.tags.length > 0 && <p>Tags: {post.tags.join(', ')}</p>}
+            <p>
+                Likes: {post.likesCount} | Comments: {post.commentsCount}
+            </p>
         </article>
     );
 }
