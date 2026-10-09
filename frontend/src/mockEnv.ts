@@ -7,18 +7,21 @@ if (import.meta.env.DEV) {
     if (!(await isTMA('complete'))) {
         const themeParams = {
             accent_text_color: '#6ab2f2',
-            bg_color: '#17212b',
+            //bg_color: '#17212b', // изначально в моках
+            bg_color: '#ffffff', // для проверки светлой темы
             button_color: '#5288c1',
             button_text_color: '#ffffff',
             destructive_text_color: '#ec3942',
             header_bg_color: '#17212b',
             hint_color: '#708499',
             link_color: '#6ab3f3',
-            secondary_bg_color: '#232e3c',
+            // secondary_bg_color: '#232e3c', // изначально в моках
+            secondary_bg_color: '#f0f0f0', // для проверки светлой темы
             section_bg_color: '#17212b',
             section_header_text_color: '#6ab3f3',
             subtitle_text_color: '#708499',
-            text_color: '#f5f5f5',
+            //text_color: '#f5f5f5', // изначально в моках
+            text_color: '#000000', // для проверки светлой темы
         } as const;
         const noInsets = { left: 0, top: 0, bottom: 0, right: 0 } as const;
 
