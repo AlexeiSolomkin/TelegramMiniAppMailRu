@@ -1,0 +1,3 @@
+.app-layout__content {
+    padding-bottom: calc(var(--tab-bar-height) + var(--safe-area-bottom));
+}
