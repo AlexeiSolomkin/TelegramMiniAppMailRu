@@ -8,7 +8,7 @@
     --color-link: var(--tg-theme-link-color, #0077ff);
     --color-accent: #ff7a00;
 
-    /* Шрифт */
+    /* Шрифты */
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     --font-size-title: 20px;
@@ -42,6 +42,11 @@
     /* Ширина контента */
     --content-max-width: 748px; /* десктоп и планшет */
     --content-max-width-landscape: 566px; /* телефон горизонтально */
+
+    /* для таббара */
+    --color-separator: var(--tg-theme-section-separator-color, rgba(0, 0, 0, 0.08));
+    --tab-bar-height: 56px;
+    --safe-area-bottom: var(--tg-viewport-safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
 }
 
 /* Базовый сброс */

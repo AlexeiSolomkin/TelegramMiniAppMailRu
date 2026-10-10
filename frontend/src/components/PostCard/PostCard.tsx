@@ -1,4 +1,6 @@
+import { Link } from 'react-router';
 import type { Post } from '@/types/post';
+
 import './PostCard.css';
 
 import namespaceIcon from '@/assets/icons/namespace1.svg';
@@ -20,9 +22,10 @@ const POST_TYPE_LABELS: Record<Post['type'], string> = {
 
 interface PostCardProps {
     post: Post;
+    to?: string;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, to }: PostCardProps) {
     const { author, tags = [] } = post;
 
     return (
@@ -54,8 +57,17 @@ export function PostCard({ post }: PostCardProps) {
                 </button>
             </header>
 
-            <h2 className="post-card__title">{post.title}</h2>
-            <p className="post-card__text">{post.content}</p>
+            {to ? (
+                <Link to={to} className="post-card__body">
+                    <h2 className="post-card__title">{post.title}</h2>
+                    <p className="post-card__text">{post.content}</p>
+                </Link>
+            ) : (
+                <div className="post-card__body">
+                    <h2 className="post-card__title">{post.title}</h2>
+                    <p className="post-card__text">{post.content}</p>
+                </div>
+            )}
 
             <div className="post-card__tags">
                 <span className="post-card__type">
