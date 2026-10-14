@@ -22,8 +22,24 @@ const BLOCK_SEPARATORS: Partial<Record<string, string>> = {
     bulletList: '\n',
     orderedList: '\n',
 };
+const OTVET_ORIGIN = 'https://otvet.mail.ru';
 
-// Функция для преобразования ApiDocNode из апишки в строку
+/**
+ * Функция, преобразующая относительный путь в абсолютный URL.
+ * Используется для аватаров пользователей, которые могут быть указаны как относительные пути.
+ * Пустая строка превращается в undefined
+ */
+function toAbsoluteUrl(url: string): string | undefined {
+    if (!url) {
+        return undefined;
+    }
+    return new URL(url, OTVET_ORIGIN).toString();
+}
+
+/**
+ * Функция, преобразующая узел документа (из API MailRu) в текст.
+ * Абзацы разделяются пустой строкой, пункты списков — переносом.
+ */
 function docToText(node: ApiDocNode): string {
     if (node.text) {
         return node.text;
@@ -47,17 +63,16 @@ export function toPost(topic: ApiTopic): Post {
     return {
         id: topic.id,
         title: topic.title,
-        type: 'post', // TODO: в ответе числа - надо спросить у Мартина
+        type: 'post', // TODO: в ответе числа - надо уточнить
         content: docToText(topic.content),
         author: {
             name: topic.author.username,
-            // добавить добавку https://otvet.mail.ru если путь с / начинается
-            avatar: topic.author.avatar,
+            avatar: toAbsoluteUrl(topic.author.avatar),
         },
         tags: topic.tags.map((tag) => tag.title),
-        nameSpace: topic.spaces[0]?.title || '',
+        nameSpace: topic.spaces[0]?.title ?? '',
         createdAt: topic.created_at,
-        likesCount: topic.reaction_counter?.find((r) => r.Type === 1)?.Count || 0,
+        likesCount: topic.reaction_counter?.find((r) => r.Type === 1)?.Count ?? 0, // TODO: в ответе числа - надо уточнить
         commentsCount: topic.replies_count,
     };
 }
