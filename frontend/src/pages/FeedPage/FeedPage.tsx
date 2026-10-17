@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
+
+import { getFeed } from '@/api';
 import { Page } from '@/components/Page';
 import { PostCard } from '@/components/PostCard/PostCard';
-import { posts } from '@/api/mocks/posts';
-import type { Post } from '@/types/post';
 import type { FeedType } from '@/types/feed';
+import type { Post } from '@/types/post';
 
 import './FeedPage.css';
 
@@ -10,29 +12,49 @@ export interface FeedPageProps {
     feed: FeedType;
 }
 
-// Временная сортировка моков. Когда появится API, каждую ленту будет отдавать сервер.
-function getFeedPosts(feed: FeedType): Post[] {
-    const sorted = [...posts];
-
-    switch (feed) {
-        case 'popular':
-            return sorted.sort((a, b) => b.likesCount - a.likesCount);
-        case 'new':
-            return sorted.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-        case 'discussed':
-            return sorted.sort((a, b) => b.commentsCount - a.commentsCount);
-    }
-}
-
 export function FeedPage({ feed }: FeedPageProps) {
-    const feedPosts = getFeedPosts(feed);
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        setIsLoading(true);
+        setError(null);
+
+        void getFeed(feed)
+            .then((loadedPosts) => {
+                if (!isCancelled) {
+                    setPosts(loadedPosts);
+                }
+            })
+            .catch((err: unknown) => {
+                if (!isCancelled) {
+                    setError(err instanceof Error ? err.message : 'Не удалось загрузить ленту');
+                }
+            })
+            .finally(() => {
+                if (!isCancelled) {
+                    setIsLoading(false);
+                }
+            });
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [feed]);
 
     return (
         <Page back={false}>
             <main className="feed">
-                {feedPosts.map((post) => (
-                    <PostCard key={post.id} post={post} to={`/post/${post.id}`} />
-                ))}
+                {isLoading && <p className="feed__status">Загрузка…</p>}
+                {error && <p className="feed__status">{error}</p>}
+                {!isLoading &&
+                    !error &&
+                    posts.map((post) => (
+                        <PostCard key={post.id} post={post} to={`/post/${post.id}`} />
+                    ))}
             </main>
         </Page>
     );
