@@ -38,6 +38,13 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/otvet-api/, '/api'),
             },
+            // Наш бэкенд (репозиторий TelegramMiniAppMailru_backend), запущенный локально на :80.
+            // /backend/api/me → http://localhost/api/me
+            '/backend': {
+                target: 'http://localhost:80',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/backend/, ''),
+            },
         },
     },
 });

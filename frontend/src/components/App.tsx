@@ -2,6 +2,7 @@ import { HashRouter } from 'react-router';
 import { useLaunchParams, useSignal, miniApp } from '@tma.js/sdk-react';
 import { AppRoot } from '@telegram-apps/telegram-ui';
 
+import { AuthProvider } from '@/auth/AuthContext';
 import { AppRoutes } from '@/navigation/routes';
 
 export function App() {
@@ -13,9 +14,11 @@ export function App() {
             appearance={isDark ? 'dark' : 'light'}
             platform={['macos', 'ios'].includes(lp.tgWebAppPlatform) ? 'ios' : 'base'}
         >
-            <HashRouter>
-                <AppRoutes />
-            </HashRouter>
+            <AuthProvider>
+                <HashRouter>
+                    <AppRoutes />
+                </HashRouter>
+            </AuthProvider>
         </AppRoot>
     );
 }

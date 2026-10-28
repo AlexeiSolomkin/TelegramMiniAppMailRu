@@ -24,6 +24,7 @@ if (import.meta.env.DEV) {
             text_color: '#000000', // для проверки светлой темы
         } as const;
         const noInsets = { left: 0, top: 0, bottom: 0, right: 0 } as const;
+        const devStartParam = new URLSearchParams(window.location.search).get('startapp');
 
         mockTelegramEnv({
             onEvent(e) {
@@ -45,6 +46,11 @@ if (import.meta.env.DEV) {
                 }
                 if (e.name === 'web_app_request_safe_area') {
                     return emitEvent('safe_area_changed', noInsets);
+                }
+                // Вне Telegram некому открыть ссылку (например, страницу входа VK ID) — открываем сами.
+                if (e.name === 'web_app_open_link') {
+                    const { url } = e.params as { url: string };
+                    window.open(url, '_blank');
                 }
             },
             launchParams: new URLSearchParams([
@@ -73,6 +79,9 @@ if (import.meta.env.DEV) {
                         ['user', JSON.stringify({ id: 1, first_name: 'Vladislav' })],
                     ]).toString(),
                 ],
+                // В разработке бэкенд возвращает после входа на http://localhost:5173/?startapp=vkid_ok
+                // (TG_MINIAPP_URL у бэкенда). В Telegram этот параметр приходит как стартовый.
+                ...(devStartParam ? [['tgWebAppStartParam', devStartParam]] : []),
                 ['tgWebAppVersion', '8.4'],
                 ['tgWebAppPlatform', 'tdesktop'],
             ]),

@@ -1,5 +1,7 @@
 import { Outlet } from 'react-router';
 
+import { AuthResultSnackbar } from '@/auth/AuthResultSnackbar';
+import { AuthSheet } from '@/components/AuthSheet/AuthSheet';
 import { TabBar } from '@/components/TabBar/TabBar';
 
 import './AppLayout.css';
@@ -11,6 +13,8 @@ export function AppLayout() {
                 <Outlet />
             </div>
             <TabBar />
+            <AuthSheet />
+            <AuthResultSnackbar />
         </div>
     );
 }

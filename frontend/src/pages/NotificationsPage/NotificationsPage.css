@@ -1,0 +1,16 @@
+.notifications {
+    align-items: center;
+    padding: var(--space-4);
+    text-align: center;
+}
+
+.notifications__account {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-secondary);
+    line-height: var(--line-height-secondary);
+}
+
+.notifications__action {
+    color: var(--color-link);
+    font-weight: var(--font-weight-medium);
+}

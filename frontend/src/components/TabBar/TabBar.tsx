@@ -9,6 +9,8 @@ import discussedIcon from '@/assets/icons/chat.svg';
 import discussedActiveIcon from '@/assets/icons/chat-active.svg';
 import notificationsIcon from '@/assets/icons/bell.svg';
 import notificationsActiveIcon from '@/assets/icons/bell-active.svg';
+import profileIcon from '@/assets/icons/profile.svg';
+import { useAuth } from '@/auth/AuthContext';
 
 import './TabBar.css';
 
@@ -21,18 +23,25 @@ const TABS = [
         icon: discussedIcon,
         activeIcon: discussedActiveIcon,
     },
-    {
-        to: '/notifications',
-        label: 'Уведомления',
-        icon: notificationsIcon,
-        activeIcon: notificationsActiveIcon,
-    },
 ];
 
+const NOTIFICATIONS_TAB = {
+    to: '/notifications',
+    label: 'Уведомления',
+    icon: notificationsIcon,
+    activeIcon: notificationsActiveIcon,
+};
+
 export function TabBar() {
+    const { isLinked, openAuthSheet } = useAuth();
+
+    // По макету: до входа последняя вкладка — аватар, который открывает окно входа,
+    // после входа — уведомления.
+    const tabs = isLinked ? [...TABS, NOTIFICATIONS_TAB] : TABS;
+
     return (
         <nav className="tab-bar" aria-label="Разделы">
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
                 <NavLink
                     key={tab.to}
                     to={tab.to}
@@ -51,6 +60,16 @@ export function TabBar() {
                     )}
                 </NavLink>
             ))}
+            {!isLinked && (
+                <button
+                    type="button"
+                    className="tab-bar__item"
+                    aria-label="Войти"
+                    onClick={openAuthSheet}
+                >
+                    <img className="tab-bar__icon" src={profileIcon} alt="" />
+                </button>
+            )}
         </nav>
     );
 }
