@@ -7,21 +7,21 @@ if (import.meta.env.DEV) {
     if (!(await isTMA('complete'))) {
         const themeParams = {
             accent_text_color: '#6ab2f2',
-            //bg_color: '#17212b', // изначально в моках
-            bg_color: '#ffffff', // для проверки светлой темы
+            bg_color: '#17212b', // изначально в моках
+            //bg_color: '#ffffff', // для проверки светлой темы
             button_color: '#5288c1',
             button_text_color: '#ffffff',
             destructive_text_color: '#ec3942',
             header_bg_color: '#17212b',
             hint_color: '#708499',
             link_color: '#6ab3f3',
-            // secondary_bg_color: '#232e3c', // изначально в моках
-            secondary_bg_color: '#f0f0f0', // для проверки светлой темы
+            secondary_bg_color: '#232e3c', // изначально в моках
+            //secondary_bg_color: '#f0f0f0', // для проверки светлой темы
             section_bg_color: '#17212b',
             section_header_text_color: '#6ab3f3',
             subtitle_text_color: '#708499',
-            //text_color: '#f5f5f5', // изначально в моках
-            text_color: '#000000', // для проверки светлой темы
+            text_color: '#f5f5f5', // изначально в моках
+            //text_color: '#000000', // для проверки светлой темы
         } as const;
         const noInsets = { left: 0, top: 0, bottom: 0, right: 0 } as const;
         const devStartParam = new URLSearchParams(window.location.search).get('startapp');
@@ -47,7 +47,6 @@ if (import.meta.env.DEV) {
                 if (e.name === 'web_app_request_safe_area') {
                     return emitEvent('safe_area_changed', noInsets);
                 }
-                // Вне Telegram некому открыть ссылку (например, страницу входа VK ID) — открываем сами.
                 if (e.name === 'web_app_open_link') {
                     const { url } = e.params as { url: string };
                     window.open(url, '_blank');
@@ -69,15 +68,18 @@ if (import.meta.env.DEV) {
                 // ```
                 // user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22...
                 // ```
-                // But in case you don't really need a valid init data, use this one:
+                // В разработке подставляем initData, подписанный токеном бота (go run ./cmd/initdata
+                // в бэкенде), чтобы бэкенд его принимал. Если переменная не задана — поддельный
+                // initData: лента работает, а запросы к нашему бэкенду получат 401.
                 [
                     'tgWebAppData',
-                    new URLSearchParams([
-                        ['auth_date', ((new Date().getTime() / 1000) | 0).toString()],
-                        ['hash', 'some-hash'],
-                        ['signature', 'some-signature'],
-                        ['user', JSON.stringify({ id: 1, first_name: 'Vladislav' })],
-                    ]).toString(),
+                    import.meta.env.VITE_DEV_INIT_DATA ||
+                        new URLSearchParams([
+                            ['auth_date', ((new Date().getTime() / 1000) | 0).toString()],
+                            ['hash', 'some-hash'],
+                            ['signature', 'some-signature'],
+                            ['user', JSON.stringify({ id: 1, first_name: 'Vladislav' })],
+                        ]).toString(),
                 ],
                 // В разработке бэкенд возвращает после входа на http://localhost:5173/?startapp=vkid_ok
                 // (TG_MINIAPP_URL у бэкенда). В Telegram этот параметр приходит как стартовый.

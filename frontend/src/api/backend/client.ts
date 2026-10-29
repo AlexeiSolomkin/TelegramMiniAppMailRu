@@ -16,24 +16,13 @@ export class BackendError extends Error {
 }
 
 /**
- * initData для заголовка Authorization.
- * В Telegram берётся настоящий. В разработке вне Telegram мок SDK содержит поддельный initData,
- * который бэкенд не примет, поэтому подставляем подписанный из VITE_DEV_INIT_DATA.
- */
-function getInitDataRaw(): string {
-    if (import.meta.env.DEV && import.meta.env.VITE_DEV_INIT_DATA) {
-        return import.meta.env.VITE_DEV_INIT_DATA;
-    }
-    return initData.raw() ?? '';
-}
-
-/**
  * Обёртка над fetch для запросов к нашему бэкенду:
  * базовый адрес, авторизация через initData, проверка ответа и разбор JSON.
  */
 export async function backendRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
     const headers = new Headers(init.headers);
-    headers.set('Authorization', `tma ${getInitDataRaw()}`);
+    // В Telegram — настоящий initData, в разработке — подписанный из VITE_DEV_INIT_DATA (см. mockEnv.ts)
+    headers.set('Authorization', `tma ${initData.raw() ?? ''}`);
 
     const response = await fetch(`${BACKEND_BASE}${path}`, { ...init, headers });
 
