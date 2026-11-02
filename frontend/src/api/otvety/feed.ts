@@ -14,7 +14,7 @@ const FEED_SORT: Record<FeedType, string> = {
  */
 export async function fetchFeed(feed: FeedType): Promise<Post[]> {
     const params = new URLSearchParams({
-        limit: '20',
+        limit: '5',
         storage: 'main',
         sort: FEED_SORT[feed],
         dir: '1',
@@ -24,6 +24,10 @@ export async function fetchFeed(feed: FeedType): Promise<Post[]> {
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error(`Ошибка при получении ленты: ${response.status}`);
+    }
+    const contentType = response.headers.get('content-type') ?? '';
+    if (response.redirected || !contentType.includes('application/json')) {
+        throw new Error('Сервер «Ответов» временно ограничил запросы, попробуйте позже');
     }
     const data = (await response.json()) as ApiFeedResponse;
     return data.result.feed.map(toPost);
