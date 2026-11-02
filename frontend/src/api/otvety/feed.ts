@@ -2,6 +2,7 @@ import type { Post } from '@/types/post';
 import type { FeedType } from '@/types/feed';
 import { toPost } from '@/api/otvety/adapters';
 import type { ApiFeedResponse } from '@/api/otvety/types';
+import { otvetRequest } from '@/api/otvety/client';
 
 const FEED_SORT: Record<FeedType, string> = {
     popular: 'rating',
@@ -10,25 +11,18 @@ const FEED_SORT: Record<FeedType, string> = {
 };
 
 /**
- * Асинхронная функция запроса ленты постов по типу сортировки(Популярное, Новое, Обсуждаемое)
+ * Функция запроса ленты постов по типу сортировки(Популярное, Новое, Обсуждаемое)
  */
 export async function fetchFeed(feed: FeedType): Promise<Post[]> {
-    const params = new URLSearchParams({
-        limit: '5',
+    const url = `/topic/feed?`;
+    const params = {
+        limit: '5', // TODO: 5 для отладки, вернуть 20
         storage: 'main',
         sort: FEED_SORT[feed],
         dir: '1',
         rank: '0',
-    });
-    const url = `/otvet-api/topic/feed?${params.toString()}`; // TODO: вынести потом в переменные окружения
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`Ошибка при получении ленты: ${response.status}`);
-    }
-    const contentType = response.headers.get('content-type') ?? '';
-    if (response.redirected || !contentType.includes('application/json')) {
-        throw new Error('Сервер «Ответов» временно ограничил запросы, попробуйте позже');
-    }
-    const data = (await response.json()) as ApiFeedResponse;
+    };
+
+    const data: ApiFeedResponse = await otvetRequest(url, params);
     return data.result.feed.map(toPost);
 }
