@@ -48,3 +48,7 @@ export interface ApiFeedResponse {
         params: { pos: number };
     };
 }
+
+export interface ApiQuestionResponse {
+    result: ApiTopic;
+}
